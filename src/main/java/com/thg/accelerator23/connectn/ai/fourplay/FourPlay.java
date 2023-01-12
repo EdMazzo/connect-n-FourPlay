@@ -1,6 +1,5 @@
-package com.thg.accelerator23.connectn.ai.yourteam;
+package com.thg.accelerator23.connectn.ai.fourplay;
 
-import com.thehutgroup.accelerator.connectn.GameRunner;
 import com.thehutgroup.accelerator.connectn.analysis.BoardAnalyser;
 import com.thehutgroup.accelerator.connectn.analysis.GameState;
 import com.thehutgroup.accelerator.connectn.player.*;
@@ -14,13 +13,13 @@ public class FourPlay extends Player {
   static final int wrap = 10;
   static final int width = 10;
   static final int height = 8;
-  static final long oddMask;
-  static final long evenMask;
+  static long oddMask;
+  static long evenMask;
 
   static byte O = Byte.parseByte(Counter.O.getStringRepresentation());
   static byte X = Byte.parseByte(Counter.X.getStringRepresentation());
 
-  GameConfig config = new GameConfig(width, height, 4);
+  static GameConfig config = new GameConfig(width, height, 4);
   static BoardAnalyser analyser = new BoardAnalyser(config);
 
   private static long[] board = new long[3];
@@ -88,7 +87,7 @@ public class FourPlay extends Player {
     return output;
   }
 
-  private static int evaluate(Board currentBoard) {
+  private static int evaluate(Board currentBoard, Counter counter) {
     long board[] = new long[3];
     // converting to bit board to simplify minimax
     byte[][] byteBoard = getBoard(currentBoard);
@@ -116,9 +115,63 @@ public class FourPlay extends Player {
   }
 
   int depth = 12;
-  public int miniMax(Board board) {
-    byte[][] currentBoard = getBoard(board);
-    long startTime = System.currentTimeMillis();
+
+  private static int min(Board board, int placeDepth, int minSearchBoundary) {
+    if (checkWinX(board)) {
+      return -200-100*placeDepth;
+    }
+    if (placeDepth <= 0) {
+      return evaluate(board, Counter.O);
+    }
+
+    int bestScore = 11848;
+    for (int i = 0; i < width; i++) {
+      if (!board.hasCounterAtPosition(new Position(i, 7))) {
+        bestScore = Math.min(bestScore, max(board, placeDepth-1, bestScore));
+      }
+
+      if (bestScore <= minSearchBoundary) {
+        if (bestScore == 11848) {
+          return 0;
+        }
+        return bestScore;
+      }
+    }
+    if (bestScore == 11848) {
+      return 0;
+    }
+    return bestScore;
+  }
+
+  private static int max(Board board, int placeDepth, int maxSearchBoundary) {
+    if (checkWinO(board)) {
+      return 200+100*placeDepth;
+    }
+    if (placeDepth <= 0) {
+      return evaluate(board, Counter.X);
+    }
+
+    int bestScore = -11848;
+    for (int i = 0; i < width; i++) {
+      if (!board.hasCounterAtPosition(new Position(i, 7))) {
+        bestScore = Math.max(bestScore, min(board, placeDepth-1, bestScore));
+      }
+
+      if (bestScore >= maxSearchBoundary) {
+        if (bestScore == -11848) {
+          return 0;
+        }
+        return bestScore;
+      }
+    }
+    if (bestScore == -11848) {
+      return 0;
+    }
+    return bestScore;
+  }
+
+  @Override
+  public int makeMove(Board board) {
     int[] score = new int[width];
     int topScore = 0;
 
@@ -130,7 +183,7 @@ public class FourPlay extends Player {
     }
     boolean[] possibleMoves = new boolean[width];
     for (int i = 0; i < width; i++) {
-      if (board.hasCounterAtPosition(new Position(i, 7))) {
+      if (!board.hasCounterAtPosition(new Position(i, 7))) {
         if (getCounter()==Counter.O)
           score[i] = min(board, depth-1, topScore-1);
         if (getCounter()==Counter.X)
@@ -185,18 +238,5 @@ public class FourPlay extends Player {
       }
     }
     return bestPosition;
-  }
-
-  private static int min(Board board, int placeDepth, int minSearchBoundary) {
-    byte[][] currentboard = getBoard(board);
-    if (checkWinX(board))
-  }
-
-  @Override
-  public int makeMove(Board board) {
-    //TODO: some crazy analysis
-    //TODO: make sure said analysis uses less than 2G of heap and returns within 10 seconds on whichever machine is running it
-
-    return 4;
   }
 }
