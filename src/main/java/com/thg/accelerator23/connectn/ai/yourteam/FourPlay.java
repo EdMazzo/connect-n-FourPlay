@@ -189,7 +189,7 @@ public class FourPlay extends Player {
 
   private static int min(Board board, int placeDepth, int minSearchBoundary) {
     byte[][] currentboard = getBoard(board);
-    if (checkWin(board))
+    if (checkWinX(board))
   }
 
   @Override
