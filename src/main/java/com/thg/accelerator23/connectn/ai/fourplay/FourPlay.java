@@ -1,7 +1,5 @@
 package com.thg.accelerator23.connectn.ai.fourplay;
 
-import com.thehutgroup.accelerator.connectn.analysis.BoardAnalyser;
-import com.thehutgroup.accelerator.connectn.analysis.GameState;
 import com.thehutgroup.accelerator.connectn.player.*;
 
 import java.util.ArrayList;
