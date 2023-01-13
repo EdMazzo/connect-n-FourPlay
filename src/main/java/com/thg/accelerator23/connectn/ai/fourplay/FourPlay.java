@@ -22,7 +22,7 @@ public class FourPlay extends Player {
 
   private static long[] board = new long[3];
 
-  {
+  static {
     long oddMaskTemp = 0;
     long evenMaskTemp = 0;
     for (int i = 0; i < width; i++) {
