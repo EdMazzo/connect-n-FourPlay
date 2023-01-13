@@ -14,8 +14,8 @@ public class FourPlay extends Player {
   static long oddMask;
   static long evenMask;
 
-  static byte O = Byte.parseByte(Counter.O.getStringRepresentation());
-  static byte X = Byte.parseByte(Counter.X.getStringRepresentation());
+  static byte O = Counter.O.getStringRepresentation().getBytes()[0];
+  static byte X = Counter.X.getStringRepresentation().getBytes()[0];
 
   static GameConfig config = new GameConfig(width, height, 4);
   static BoardAnalyser analyser = new BoardAnalyser(config);
