@@ -169,72 +169,94 @@ public class FourPlay extends Player {
   }
 
   @Override
+//  public int makeMove(Board board) {
+//    int bestPosition = 0;
+//    int[] score = new int[width];
+//    int topScore = 0;
+//
+//    if (getCounter() == Counter.O) {
+//      topScore = -1000000;
+//    }
+//    if (getCounter() == Counter.X) {
+//      topScore = 1000000;
+//    }
+//
+//    boolean[] possibleMoves = new boolean[width];
+//    for (int i = 0; i < width; i++) {
+//      if (!board.hasCounterAtPosition(new Position(i, 7))) {
+//        if (getCounter()==Counter.O)
+//          score[i] = min(board, depth-1, topScore-1);
+//        if (getCounter()==Counter.X)
+//          score[i] = max(board, depth-1, topScore+1);
+//        topScore = score[i];
+//        possibleMoves[i] = true;
+//      } else {
+//        possibleMoves[i] = false;
+//      }
+//      bestPosition = score[i] > score[bestPosition] ? i : bestPosition;
+//    }
+//
+//
+//    int bestPossibleScore = 0;
+//    ArrayList tiedMoves = new ArrayList();
+//
+//    if (getCounter()==Counter.O) {
+//      int bestScore = -1000000;
+//      for (int i = 0; i < width; i++) {
+//        if (score[i] > bestScore & possibleMoves[i]) {
+//          tiedMoves.clear();
+//          tiedMoves.add(i);
+//          bestScore = score[i];
+//          bestPossibleScore = score[i];
+//        }
+//        if (score[i] == bestScore & possibleMoves[i]) {
+//          tiedMoves.add(i);
+//        }
+//      }
+//    }
+//    if (getCounter() == Counter.X) {
+//      int bestScore = -1000000;
+//      for (int i = 0; i < width; i++) {
+//        if (score[i] < bestScore & possibleMoves[i]) {
+//          tiedMoves.clear();
+//          tiedMoves.add(i);
+//          bestScore = score[i];
+//          bestPossibleScore = score[i];
+//        }
+//        if (score[i] == bestScore & possibleMoves[i]) {
+//          tiedMoves.add(i);
+//        }
+//      }
+//    }
+//
+//    Random rand = new Random();
+////    if (tiedMoves.size() != 0) {
+////      bestPosition = (int) tiedMoves.get(tiedMoves.size()*rand.nextInt());
+////    }
+//    int deathScore = 0;
+//
+//    if (getCounter() == Counter.O && bestPossibleScore >=100 || getCounter() == Counter.X && bestPossibleScore <= -100) {
+//      if (getCounter() == Counter.O) {
+//        deathScore = depth - (bestPossibleScore - 200)/10-2;
+//      }
+//      if (getCounter() == Counter.X) {
+//        deathScore = depth + (bestPossibleScore + 200)/10-2;
+//      }
+//    }
+//    return bestPosition;
+//  }
+//}
+
   public int makeMove(Board board) {
-    int[] score = new int[width];
-    int topScore = 0;
-
-    if (getCounter() == Counter.O) {
-      topScore = -1000000;
-    }
-    if (getCounter() == Counter.X) {
-      topScore = 1000000;
-    }
-    boolean[] possibleMoves = new boolean[width];
-    for (int i = 0; i < width; i++) {
-      if (!board.hasCounterAtPosition(new Position(i, 7))) {
-        if (getCounter()==Counter.O)
-          score[i] = min(board, depth-1, topScore-1);
-        if (getCounter()==Counter.X)
-          score[i] = max(board, depth-1, topScore+1);
-        topScore = score[i];
-        possibleMoves[i] = true;
-      } else {
-        possibleMoves[i] = false;
-      }
-    }
-    int bestPossibleScore = 0;
-    ArrayList tiedMoves = new ArrayList();
-    if (getCounter()==Counter.O) {
-      int bestScore = -1000000;
+      Random rand = new Random();
+      ArrayList possiblePos = new ArrayList();
       for (int i = 0; i < width; i++) {
-        if (score[i] > bestScore & possibleMoves[i]) {
-          tiedMoves.clear();
-          tiedMoves.add(i);
-          bestScore = score[i];
-          bestPossibleScore = score[i];
-        }
-        if (score[i] == bestScore & possibleMoves[i]) {
-          tiedMoves.add(i);
+        if (!board.hasCounterAtPosition(new Position(i, height))) {
+          possiblePos.add(i);
         }
       }
+      System.out.println(possiblePos.size());
+      System.out.println(possiblePos.size() * Math.random());
+      return (int) (possiblePos.size() * Math.random());
     }
-    if (getCounter() == Counter.X) {
-      int bestScore = -1000000;
-      for (int i = 0; i < width; i++) {
-        if (score[i] < bestScore & possibleMoves[i]) {
-          tiedMoves.clear();
-          tiedMoves.add(i);
-          bestScore = score[i];
-          bestPossibleScore = score[i];
-        }
-        if (score[i] == bestScore & possibleMoves[i]) {
-          tiedMoves.add(i);
-        }
-      }
-    }
-
-    Random rand = new Random();
-    int bestPosition = (int) tiedMoves.get(tiedMoves.size()*rand.nextInt());
-    int deathScore = 0;
-
-    if (getCounter() == Counter.O && bestPossibleScore >=100 || getCounter() == Counter.X && bestPossibleScore <= -100) {
-      if (getCounter() == Counter.O) {
-        deathScore = depth - (bestPossibleScore - 200)/10-2;
-      }
-      if (getCounter() == Counter.X) {
-        deathScore = depth + (bestPossibleScore + 200)/10-2;
-      }
-    }
-    return bestPosition;
-  }
 }
